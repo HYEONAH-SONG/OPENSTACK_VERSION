@@ -1,0 +1,17 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+        <meta charset="UTF-8"> 
+</head>
+<body>
+    <form action='{% url "sendurl" %}', method="POST">
+        {% csrf_token %} 
+        {{form.as_p}}
+        <br/>
+
+        <input type='submit' value='Submit'>
+    </form>
+</body>
+</html>
+
+<!-- {% url "sendurl" %} -->
