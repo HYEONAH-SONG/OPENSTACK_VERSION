@@ -6,9 +6,6 @@ def view(request):
     form = Resource()
     return render(request, 'cloudservice.html', {'form':form})
 
-
-
-
 def send(request):
     send_form=Resource(request.POST)
 
