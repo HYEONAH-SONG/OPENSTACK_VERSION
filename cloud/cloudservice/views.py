@@ -27,6 +27,6 @@ def send(request):
         }
     ]
 
-   
+
     return JsonResponse({'resource' : resource}, safe=False)
     # return JsonResponse(res_list, safe=False)

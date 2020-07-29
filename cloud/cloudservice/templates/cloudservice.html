@@ -1,8 +1,12 @@
-<!DOCTYPE html> 
+{% load static %}
+
+<!DOCTYPE html>
 <html> 
 <head> 
         <meta charset="UTF-8"> 
+        <link rel="stylesheet" href="{% static 'cloudservice/style.css' %}"/>
 </head>
+
 <body>
     <form action='{% url "sendurl" %}', method="POST">
         {% csrf_token %} 
@@ -10,6 +14,18 @@
         <br/>
 
         <input type='submit' value='Submit'>
+        <br></br>
+        <br></br>
+
+        <div class='hot'>
+            assdf
+            dfd
+            dfd
+            <!-- <textarea name="hot" rows="40" cols="40"></textarea>
+            <textarea name="hot_list" rows="40" cols="40"></textarea> -->
+        </div>
+
+        
     </form>
 </body>
 </html>
