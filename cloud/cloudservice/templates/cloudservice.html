@@ -9,20 +9,31 @@
 
 <body>
     <form action='{% url "sendurl" %}', method="POST">
+        <h4>현재 HOT Version : </h4>
+
         {% csrf_token %} 
         {{form.as_p}}
         <br/>
 
         <input type='submit' value='Submit'>
         <br></br>
-        <br></br>
+        <p></p>
 
-        <div class='hot'>
-            assdf
-            dfd
-            dfd
-            <!-- <textarea name="hot" rows="40" cols="40"></textarea>
-            <textarea name="hot_list" rows="40" cols="40"></textarea> -->
+        <h3>Vesion 목록</h3>
+        <div class='version_list'>
+            V1.1
+            <p></p>
+            V1.2
+            <p></p>
+            V2.1
+        </div>
+        
+        <P></P>
+
+        <h3>HOT 파일 내용</h3>
+        <div class='HOT'>
+            
+            
         </div>
 
         
