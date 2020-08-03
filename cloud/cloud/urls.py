@@ -4,7 +4,6 @@ from django.urls import path
 
 import cloudservice.views
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', cloudservice.views.view),
