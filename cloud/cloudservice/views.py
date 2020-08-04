@@ -23,13 +23,14 @@ def send(request):
     #  res_list = list(res.objects.values())
 
     resource = [
-        {'language' : l_f.data,
+        {
+        'language' : l_f.data,
         'flavor' : f_f.data,
         'image' : i_f.data,
         }
     ]
     
-    data = {
+    payload = {
         "auth": {
             "identity": {
                 "methods": [
@@ -48,20 +49,16 @@ def send(request):
         }
     }
 
-    
-
-    res = requests.post("http://192.168.56.104:5000/v3/auth/tokens",
+    res = requests.post("http://192.168.0.91/identity/v3/auth/tokens",
         headers = {'content-type' : 'application/json'},
-        data = json.dumps(data))
+        data = json.dumps(payload))
 
-    #token = identity["X-Subject_Token"]
+    token = res.headers['X-Subject-Token']
 
-    return res.headers
+    print(res.headers)
 
     # index_file = requests.get("http://192.168.56.104/file/index.json", headers=headers)
-
-    # return index_file.json
     
-    
-    #return JsonResponse({'resource' : resource}, safe=False)
+    return JsonResponse({'token': res.headers['X-Subject-Token']}, safe=False)
+    #return JsonResponse({'resource' : res.headers }, safe=False)
     # return JsonResponse(res_list, safe=False)
