@@ -49,16 +49,20 @@ def send(request):
         }
     }
 
-    res = requests.post("http://192.168.0.91/identity/v3/auth/tokens",
+    auth_res = requests.post("http://192.168.0.91/identity/v3/auth/tokens",
         headers = {'content-type' : 'application/json'},
         data = json.dumps(payload))
 
-    token = res.headers['X-Subject-Token']
-
-    print(res.headers)
-
-    # index_file = requests.get("http://192.168.56.104/file/index.json", headers=headers)
+    token = auth_res.headers['X-Subject-Token']
     
-    return JsonResponse({'token': res.headers['X-Subject-Token']}, safe=False)
-    #return JsonResponse({'resource' : res.headers }, safe=False)
-    # return JsonResponse(res_list, safe=False)
+  
+    index_res = requests.get("http://192.168.0.91:8080/v1/AUTH_8f0c359f55ec470eb69cd056b0a5b491/files/index.json",
+        headers={'X-Auth-Token' : token,
+                'content-type' : 'application/json'}).json()
+
+    #index = index_res.text
+
+    return JsonResponse({
+                            'index' : index_res,
+                            'token' : token
+                        }, safe=False)
