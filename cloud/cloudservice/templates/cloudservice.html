@@ -9,7 +9,7 @@
 
 <body>
     <form action='{% url "sendurl" %}', method="POST">
-        <h4>현재 HOT Version : </h4>
+        <h4>현재 HOT Version : {{ version }} </h4> 
 
         {% csrf_token %} 
         {{form.as_p}}
@@ -21,9 +21,7 @@
 
         <h3>Vesion 목록</h3>
         <div class='version_list'>
-            <p>V1.0</p>
-            <p>V1.1</p>
-            <p>V2.0</p>
+
         </div>
         
         <p></p>

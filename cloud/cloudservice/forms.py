@@ -8,6 +8,11 @@ class Resource(forms.Form):
         ('Javascript', 'Javascript'),
         ('Python', 'Python'),
     ]
+    img=[
+        ('Windows', 'Windows'),
+        ('Linux', 'Linux'),
+        ('Mac os', 'Mac OS'),
+    ]
     flav=[
         ('m1.tiny', 'm1.tiny'),
         ('m1.small', 'm1.small'),
@@ -15,12 +20,6 @@ class Resource(forms.Form):
         ('m1.large', 'm1.large'),
         ('m1.xlarge', 'm1.xlarge'),
     ]
-    img=[
-        ('Windows', 'Windows'),
-        ('Linux', 'Linux'),
-        ('Mac os', 'Mac OS'),
-    ]
-
 
     language = forms.ChoiceField(\
         required= True,\
@@ -30,14 +29,6 @@ class Resource(forms.Form):
         disabled=False,
         choices=lan,
     )
-    flavor = forms.ChoiceField(\
-        required= True,\
-        label='Flavor ',\
-        initial='none',\
-        error_messages={'required':'Please enter language info', 'invalid choice': 'Please select a valid one'},\
-        disabled=False,
-        choices=flav,
-    )
     image = forms.ChoiceField(\
         required= True,\
         label='Image ',\
@@ -46,6 +37,12 @@ class Resource(forms.Form):
         disabled=False,
         choices=img,
     )
-
-
+    flavor = forms.ChoiceField(\
+        required= True,\
+        label='Flavor ',\
+        initial='none',\
+        error_messages={'required':'Please enter language info', 'invalid choice': 'Please select a valid one'},\
+        disabled=False,
+        choices=flav,
+    )
     
