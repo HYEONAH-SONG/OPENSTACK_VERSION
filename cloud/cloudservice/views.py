@@ -13,6 +13,7 @@ def view(request):
         'form' : form,
         'version' : nowVersion
     }
+
     return render(request, 'cloudservice.html', context)
 
 def send(request):
@@ -57,14 +58,22 @@ def send(request):
         data = json.dumps(payload))
 
     token = auth_res.headers['X-Subject-Token']
-    
+
+    HOT_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/baseHOT.yaml",
+        headers={'X-Auth-Token' : token,
+                'content-type' : 'application/yaml'}).text
+
+    HOT = yaml.load(HOT_res)
+
+
     index_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
         headers={'X-Auth-Token' : token,
                 'content-type' : 'application/json'}).json()
-    print(index_res)
+
     major_count = 1
     minor_count = 0
     global nowVersion
+
     while(True):
         try:
             if index_res["V"+str(major_count)+".0"]["resource"]["language"] == l_f.data and index_res["V"+str(major_count)+".0"]["resource"]["Image"] == i_f.data:
@@ -77,9 +86,12 @@ def send(request):
                         else:
                             minor_count += 1
                     except KeyError:
-                        # add new mior version
+                        # add new minor version
                         index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] = f_f.data
                         nowVersion = "V"+str(major_count)+"."+str(minor_count)
+                        HOT["description"] = "Coding System(" + l_f.data + ")" # language
+                        HOT["resources"]["my_instance"]["properties"]["image"] = i_f.data # image
+                        HOT["resources"]["my_instance"]["properties"]["flavor"] = f_f.data # flavor
                         break
                 break
             major_count += 1
@@ -88,6 +100,9 @@ def send(request):
             index_res["V"+str(major_count)+".0"]= { "resource" : resource }
             index_res["V"+str(major_count)+".0"]["V"+str(major_count)+".0"] = f_f.data
             nowVersion = "V"+str(major_count)+"."+str(minor_count)
+            HOT["description"] = "Coding System(" + l_f.data + ")" # language
+            HOT["resources"]["my_instance"]["properties"]["image"] = i_f.data # image
+            HOT["resources"]["my_instance"]["properties"]["flavor"] = f_f.data # flavor
             break
     
     requests.put("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
@@ -95,8 +110,11 @@ def send(request):
             'content-type' : 'application/json'
             }, data=json.dumps(index_res))
 
-    print("now Version : " + nowVersion)
-    
+    requests.put("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/" + nowVersion + ".yaml",
+    headers={'X-Auth-Token' : token,
+            'content-type' : 'application/yaml'
+            }, data=yaml.dump(HOT))
+
     return JsonResponse({
                             'index' : index_res,
                             'token' : token
