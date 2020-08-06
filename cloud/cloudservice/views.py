@@ -33,16 +33,19 @@ def send(request):
                 ],
                 "password": {
                     "user": {
-                        "name": "admin",
-                        "domain": {
-                            "name": "Default"
-                        },
+                        "id": "6443abb0d446410f9f5918d910e767a0 ",
                         "password": "devstack"
                     }
+                }
+            },
+            "scope": {
+                "project": {
+                    "id": "2e2cca5c94e44a859a24b8a63b0ec4cb"
                 }
             }
         }
     }
+
 
     auth_res = requests.post("http://192.168.0.251/identity/v3/auth/tokens",
         headers = {'content-type' : 'application/json'},
@@ -54,7 +57,7 @@ def send(request):
     index_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
         headers={'X-Auth-Token' : token,
                 'content-type' : 'application/json'}).json()
-    
+    print(index_res)
     major_count = 1
     minor_count = 0
     while(True):
@@ -63,30 +66,30 @@ def send(request):
                 while(True):
                     try:
                         if index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] == f_f.data:
-                            print("get Version : " + "V"+str(major_count)+"."+str(minor_count))
                             break
                         else:
                             minor_count += 1
                     except KeyError:
-                        new_version = {"V"+str(major_count)+"."+str(minor_count) : f_f.data}
-                        index_res["V"+str(major_count)+".0"].update(new_version)
+                        #new_version = {"V"+str(major_count)+"."+str(minor_count) : f_f.data}
+                        index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] = f_f.data
+                        #index_res["V"+str(major_count)+".0"].update(new_version)
+                        print (index_res)
                         break
                 break
             major_count += 1
         except KeyError:
-            new_version = {"V"+str(major_count)+".0" : {"resource" :resource, "V"+str(major_count)+".0" : f_f.data }}
-            print(new_version)
-            index_res.update(new_version) 
-            print(index_res)
+            #new_version = {"V"+str(major_count)+".0" : {"resource" :resource, "V"+str(major_count)+".0" : f_f.data }}
+            index_res["V"+str(major_count)+".0"]= { "resource" : resource }
+            index_res["V"+str(major_count)+".0"]["V"+str(major_count)+".0"] = f_f.data
+            #index_res.update(new_version)
+            print (index_res)
             break
-
-    #replace_data = index_res
-    """
+    
     requests.put("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
     headers={'X-Auth-Token' : token,
             'content-type' : 'application/json'
-            }, data=replace_data)
-    """
+            }, data=json.dumps(index_res))
+    
     return JsonResponse({
                             'index' : index_res,
                             'token' : token
