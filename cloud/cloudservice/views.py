@@ -48,6 +48,7 @@ def send(request):
             }
         }
     }
+
     auth_res = requests.post("http://192.168.0.251/identity/v3/auth/tokens",
         headers = {'content-type' : 'application/json'},
         data = json.dumps(payload))
@@ -57,8 +58,19 @@ def send(request):
     index_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
         headers={'X-Auth-Token' : token,
                 'content-type' : 'application/json'}).json()
-
-    #index = index_res.text
+    
+    version_count = 1
+    
+    while(True):
+        try:
+            index_res["V"+str(version_count)+".0"]
+        except KeyError:
+            print("KeyError : " + "V"+str(version_count)+".0")
+            new_version = {"V"+str(version_count)+".0" : resource}
+            index_dict = json.load(index_res)
+            index_dict.update(new_version)
+            index_res = json.dumps(index_dict)
+            break
 
     return JsonResponse({
                             'index' : index_res,
