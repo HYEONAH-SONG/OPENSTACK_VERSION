@@ -48,7 +48,6 @@ def send(request):
             }
         }
     }
-
     auth_res = requests.post("http://192.168.0.251/identity/v3/auth/tokens",
         headers = {'content-type' : 'application/json'},
         data = json.dumps(payload))
