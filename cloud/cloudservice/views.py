@@ -6,6 +6,7 @@ import requests
 import yaml
 
 nowVersion = "V1.0"
+heat_template_version = '2015-10-15'
 
 def view(request):
     form = Resource()
@@ -59,7 +60,7 @@ def send(request):
 
     token = auth_res.headers['X-Subject-Token']
 
-    HOT_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/baseHOT.yaml",
+    HOT_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/baseHOT(V1.0).yaml",
         headers={'X-Auth-Token' : token,
                 'content-type' : 'application/yaml'}).text
 
@@ -104,16 +105,18 @@ def send(request):
             HOT["resources"]["my_instance"]["properties"]["image"] = i_f.data # image
             HOT["resources"]["my_instance"]["properties"]["flavor"] = f_f.data # flavor
             break
-    
+
+    HOT["heat_template_version"] = heat_template_version
+
     requests.put("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
     headers={'X-Auth-Token' : token,
             'content-type' : 'application/json'
-            }, data=json.dumps(index_res))
+            }, data=json.dumps(index_res, indent=4))
 
     requests.put("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/" + nowVersion + ".yaml",
     headers={'X-Auth-Token' : token,
             'content-type' : 'application/yaml'
-            }, data=yaml.dump(HOT))
+            }, data=yaml.dump(HOT, sort_keys=False))
 
     return JsonResponse({
                             'index' : index_res,
