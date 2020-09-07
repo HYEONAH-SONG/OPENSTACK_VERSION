@@ -20,8 +20,8 @@ def view(request):
 def send(request):
     send_form=Resource(request.POST)
 
-    l_f = send_form['language']
     f_f = send_form['flavor']
+    l_f = send_form['language']
     i_f = send_form['image']
 
     # class res:

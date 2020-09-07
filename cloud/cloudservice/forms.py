@@ -1,6 +1,11 @@
 from django import forms
 
 class Resource(forms.Form):
+    img=[
+        ('Windows', 'Windows'),
+        ('Linux', 'Linux'),
+        ('Mac os', 'Mac OS'),
+    ]
     lan=[
         ('C', 'C'),
         ('C++', 'C++'),
@@ -8,18 +13,32 @@ class Resource(forms.Form):
         ('Javascript', 'Javascript'),
         ('Python', 'Python'),
     ]
-    img=[
-        ('Windows', 'Windows'),
-        ('Linux', 'Linux'),
-        ('Mac os', 'Mac OS'),
-    ]
-    flav=[
-        ('m1.tiny', 'm1.tiny'),
-        ('m1.small', 'm1.small'),
-        ('m1.medium', 'm1.medium'),
-        ('m1.large', 'm1.large'),
-        ('m1.xlarge', 'm1.xlarge'),
-    ]
+  
+    # flav=[
+    #     ('m1.tiny', 'm1.tiny'),
+    #     ('m1.small', 'm1.small'),
+    #     ('m1.medium', 'm1.medium'),
+    #     ('m1.large', 'm1.large'),
+    #     ('m1.xlarge', 'm1.xlarge'),
+    # ]
+
+    # flavor = forms.ChoiceField(\
+    #     required= True,\
+    #     label='학생 수 Flavor 'ㄴ,\
+    #     initial='none',\
+    #     error_messages={'required':'Please enter language info', 'invalid choice': 'Please select a valid one'},\
+    #     disabled=False,
+    #     choices=flav,
+    # )
+
+    image = forms.ChoiceField(\
+        required= True,\
+        label='운영체제 ',\
+        initial='none',\
+        error_messages={'required':'Please enter language info', 'invalid choice': 'Please select a valid one'},\
+        disabled=False,
+        choices=img,
+    )
 
     language = forms.ChoiceField(\
         required= True,\
@@ -29,20 +48,6 @@ class Resource(forms.Form):
         disabled=False,
         choices=lan,
     )
-    image = forms.ChoiceField(\
-        required= True,\
-        label='Image ',\
-        initial='none',\
-        error_messages={'required':'Please enter language info', 'invalid choice': 'Please select a valid one'},\
-        disabled=False,
-        choices=img,
-    )
-    flavor = forms.ChoiceField(\
-        required= True,\
-        label='Flavor ',\
-        initial='none',\
-        error_messages={'required':'Please enter language info', 'invalid choice': 'Please select a valid one'},\
-        disabled=False,
-        choices=flav,
-    )
+    
+    
     

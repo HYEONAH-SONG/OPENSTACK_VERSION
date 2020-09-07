@@ -10,7 +10,8 @@
 <body>
     <form action='{% url "sendurl" %}', method="POST">
         <h4>현재 HOT Version : {{ version }} </h4> 
-
+        
+        학생 수: <input type = "text" name = "student number" size = "3">
         {% csrf_token %} 
         {{form.as_p}}
         <br/>
