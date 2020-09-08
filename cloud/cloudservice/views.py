@@ -18,24 +18,41 @@ def view(request):
     return render(request, 'cloudservice.html', context)
 
 def send(request):
+
+    # 학생수
+    student_num = request.POST.getlist('student cnt')[0]
+    print(student_num)
+
+    # 운영체제
     send_form=Resource(request.POST)
-
-    f_f = send_form['flavor']
-    l_f = send_form['language']
     i_f = send_form['image']
+    image = i_f.data
+    print(image)
+    
+    # 언어
+    language = request.POST.getlist('lan')[0]
+    print(language)
 
-    # class res:
-    #     language : l_f.data
-    #     flavor : f_f.data
-    #     image : i_f.data 
+    # 교육 기간
+    edu_term = request.POST.getlist('term')[0]
+    print(edu_term)
 
-    #  res_list = list(res.objects.values())
+    # 데이터 유지
+    data_maintence = request.POST.getlist('maintenance')[0]
+    print(data_maintence)
 
-    resource = {'language' : l_f.data, 'Image' : i_f.data }
+    #이벤트
+    event = request.POST.getlist('event')[0]
+    print(event)
+
+
+
+    resource = {'Image' : i_f.data }
     
     payload = {
         "auth": {
             "identity": {
+
                 "methods": [
                     "password"
                 ],
