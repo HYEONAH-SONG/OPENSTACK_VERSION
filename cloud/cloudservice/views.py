@@ -40,7 +40,7 @@ def send(request):
     language = request.POST.getlist('lan')[0]
     print(language)
 
-    # 교육 기간
+    # 교육 Term
     edu_term = request.POST.getlist('term')[0]
     print(edu_term)
 
