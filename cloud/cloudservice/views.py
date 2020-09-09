@@ -20,8 +20,15 @@ def view(request):
 def send(request):
 
     # 학생수
-    student_num = request.POST.getlist('student cnt')[0]
-    print(student_num)
+    student_num = int(request.POST.getlist('student cnt')[0])
+    if student_num < 10 : flavor = "m1.tiny"
+    elif student_num > 9 and student_num <20 : flavor = "m1.small"
+    elif student_num > 19 and student_num <40 : flavor ="m1.medium"
+    elif student_num > 39 and student_num < 80 : flavor = "m1.large"
+    elif student_num > 79 and student_num < 160 : flavor = "m1.xlarge"
+
+    print(flavor)
+    
 
     # 운영체제
     send_form=Resource(request.POST)
@@ -71,19 +78,21 @@ def send(request):
         }
     }
 
+
     auth_res = requests.post("http://192.168.0.251/identity/v3/auth/tokens",
         headers = {'content-type' : 'application/json'},
         data = json.dumps(payload))
 
     token = auth_res.headers['X-Subject-Token']
 
+    # container에 있는 baseHOT파일 가져오기
     HOT_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/baseHOT(V1.0).yaml",
         headers={'X-Auth-Token' : token,
                 'content-type' : 'application/yaml'}).text
 
     HOT = yaml.load(HOT_res)
 
-
+    # container에 있는 index파일 가져오기
     index_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
         headers={'X-Auth-Token' : token,
                 'content-type' : 'application/json'}).json()
@@ -91,36 +100,37 @@ def send(request):
     major_count = 1
     minor_count = 0
     global nowVersion
-
+    
     while(True):
         try:
-            if index_res["V"+str(major_count)+".0"]["resource"]["language"] == l_f.data and index_res["V"+str(major_count)+".0"]["resource"]["Image"] == i_f.data:
+            if index_res["V"+str(major_count)+".0"]["resource"]["language"] == language and index_res["V"+str(major_count)+".0"]["resource"]["Image"] == image:
                 while(True):
                     try:
                         # find version
-                        if index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] == f_f.data:
+                        # 만약 flavor가 같은게 있으면 (버전 새로 생성 안해도 된다.)
+                        if index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] == flavor:
                             nowVersion = "V"+str(major_count)+"."+str(minor_count)
                             break
                         else:
                             minor_count += 1
                     except KeyError:
                         # add new minor version
-                        index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] = f_f.data
+                        index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] = flavor
                         nowVersion = "V"+str(major_count)+"."+str(minor_count)
-                        HOT["description"] = "Coding System(" + l_f.data + ")" # language
-                        HOT["resources"]["my_instance"]["properties"]["image"] = i_f.data # image
-                        HOT["resources"]["my_instance"]["properties"]["flavor"] = f_f.data # flavor
+                        HOT["description"] = "Coding System(" + language + ")" # language
+                        HOT["resources"]["my_instance"]["properties"]["image"] = image # image
+                        HOT["resources"]["my_instance"]["properties"]["flavor"] = flavor # flavor
                         break
                 break
             major_count += 1
         except KeyError:
             # add new major version
             index_res["V"+str(major_count)+".0"]= { "resource" : resource }
-            index_res["V"+str(major_count)+".0"]["V"+str(major_count)+".0"] = f_f.data
+            index_res["V"+str(major_count)+".0"]["V"+str(major_count)+".0"] = flavor
             nowVersion = "V"+str(major_count)+"."+str(minor_count)
-            HOT["description"] = "Coding System(" + l_f.data + ")" # language
-            HOT["resources"]["my_instance"]["properties"]["image"] = i_f.data # image
-            HOT["resources"]["my_instance"]["properties"]["flavor"] = f_f.data # flavor
+            HOT["description"] = "Coding System(" + language + ")" # language
+            HOT["resources"]["my_instance"]["properties"]["image"] = image # image
+            HOT["resources"]["my_instance"]["properties"]["flavor"] = flavor # flavor
             break
 
     HOT["heat_template_version"] = heat_template_version
