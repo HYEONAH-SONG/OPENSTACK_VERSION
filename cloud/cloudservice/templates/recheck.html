@@ -1,0 +1,98 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html> 
+<head> 
+        <title>오픈스택 교육 환경</title>
+        <meta charset="UTF-8"> 
+        <link rel="stylesheet" href="{% static 'cloudservice/style.css' %}"/>
+</head>
+
+<body>
+    <form action='{% url "sendurl" %}', method="POST">
+        <h4>현재 HOT Version : {{ version }} </h4> 
+        
+        학생 수: 
+        <input type = "text" value = 1 name = "student cnt" size = "2">
+        {% csrf_token %} 
+        {{form.as_p}}
+
+        <span style="color:red">언어(최소 한 개 이상 선택)</span> :
+        <input type = "checkbox" name = "lan" value = "C">
+        C
+        <input type = "checkbox" name = "lan" value = "C++">
+        C++
+        <input type = "checkbox" name = "lan" value = "Python">
+        Python
+        <input type = "checkbox" name = "lan" value = "Java">
+        Java
+        <input type = "checkbox" name = "lan" value = "Javascript">
+        Javascript
+        <input type = "checkbox" name = "lan" value = "Go">
+        Go
+        <br/>
+       
+        <br>
+        교육 기간(선택 항목) :
+        <input type = "radio" name = "term" value = "1개월">
+        1개월
+        <input type = "radio" name = "term" value = "3개월">
+        3개월
+        <input type = "radio" name = "term" value = "6개월">
+        6개월
+        <input type = "radio" name = "term" value = "9개월">
+        9개월
+        <input type = "radio" name = "term" value = "12개월">
+        12개월
+        </br>
+
+        <br>
+        교육 데이터 유지 기간(선택 항목) :
+        <input type = "radio" name = "maintenance" value = "1개월">
+        1개월
+        <input type = "radio" name = "maintenance" value = "3개월">
+        3개월
+        <input type = "radio" name = "maintenance" value = "6개월">
+        6개월
+        <input type = "radio" name = "maintenance" value = "9개월">
+        9개월
+        <input type = "radio" name = "maintenance" value = "12개월">
+        12개월
+        </br>
+
+        <br>
+        이벤트 기간(선택 항목) :
+        <input type = "radio" name = "event" value = "1주">
+        1주
+        <input type = "radio" name = "event" value = "2주">
+        2주
+        <input type = "radio" name = "event" value = "3주">
+        3주
+        <input type = "radio" name = "event" value = "4주">
+        4주
+        </br>
+        
+     
+
+
+        <br>
+        <input type='submit' value='Submit'>
+        <br></br>
+        <p></p>
+
+        {% comment %} <h3>Vesion 목록</h3>
+        <div class='version_list'>
+
+        </div>
+        
+        <p></p>
+
+        <h3>HOT 파일 내용</h3>
+        <div class='HOT'>
+            
+        </div> {% endcomment %}
+    </form>
+</body>
+</html>
+
+<!-- {% url "sendurl" %} -->

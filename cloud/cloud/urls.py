@@ -8,4 +8,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', cloudservice.views.view),
     path('sends/', cloudservice.views.send, name='sendurl'),
+    path('recheck/', cloudservice.views.send, name='recheckurl')
 ]

@@ -7,17 +7,31 @@ import yaml
 
 nowVersion = "V1.0"
 heat_template_version = '2015-10-15'
-
-def view(request):
-    form = Resource()
-    context = {
+form = Resource()
+context = {
         'form' : form,
         'version' : nowVersion
     }
 
+def view(request):
     return render(request, 'cloudservice.html', context)
 
 def send(request):
+    # 언어
+    if not request.POST.getlist('lan') :
+        return render(request, 'recheck.html', context)
+    
+    lan = request.POST.getlist('lan')
+    lan_cnt = len(lan)
+    
+    for i in range(0,lan_cnt):
+        language = language + lan[i]
+        cal_lan_cnt -= 1jhj
+        
+
+    print(language)
+
+
 
     # 학생수
     student_num = int(request.POST.getlist('student cnt')[0])
@@ -26,9 +40,9 @@ def send(request):
     elif student_num > 19 and student_num <40 : flavor ="m1.medium"
     elif student_num > 39 and student_num < 80 : flavor = "m1.large"
     elif student_num > 79 and student_num < 160 : flavor = "m1.xlarge"
+    #over 160
 
     print(flavor)
-    
 
     # 운영체제
     send_form=Resource(request.POST)
@@ -36,22 +50,21 @@ def send(request):
     image = i_f.data
     print(image)
     
-    # 언어
-    language = request.POST.getlist('lan')[0]
-    print(language)
-
     # 교육 Term
-    edu_term = request.POST.getlist('term')[0]
-    print(edu_term)
-
+    if request.POST.getlist('latermn') :
+        edu_term = request.POST.getlist('term')[0]
+        print(edu_term)
+    
     # 데이터 유지
-    data_maintence = request.POST.getlist('maintenance')[0]
-    print(data_maintence)
-
+    if request.POST.getlist('maintenance') :
+        data_maintence = request.POST.getlist('maintenance')[0]
+        print(data_maintence)
+        
     #이벤트
-    event = request.POST.getlist('event')[0]
-    print(event)
-
+    if request.POST.getlist('event') :
+        event = request.POST.getlist('event')[0]
+        print(event)
+        
 
 
     resource = {'Image' : i_f.data }
@@ -100,14 +113,15 @@ def send(request):
 
     major_count = 1
     minor_count = 0
-    global nowVersion
+    global nowVersion 
     
     while(True):
         try:
+            # compare major version
             if index_res["V"+str(major_count)+".0"]["resource"]["language"] == language and index_res["V"+str(major_count)+".0"]["resource"]["Image"] == image:
                 while(True):
                     try:
-                        # find version
+                        # conmpare minor version
                         # 만약 flavor가 같은게 있으면 (버전 새로 생성 안해도 된다.)
                         if index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] == flavor:
                             nowVersion = "V"+str(major_count)+"."+str(minor_count)
