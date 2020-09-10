@@ -23,12 +23,14 @@ def send(request):
     
     lan = request.POST.getlist('lan')
     lan_cnt = len(lan)
-    
+    language = ""
     for i in range(0,lan_cnt):
-        language = language + lan[i]
-        cal_lan_cnt -= 1jhj
+        if not i == lan_cnt-1 :
+            language = language + lan[i] +", "
+        else :
+            language = language + lan[i]
+    
         
-
     print(language)
 
 
@@ -67,7 +69,7 @@ def send(request):
         
 
 
-    resource = {'Image' : i_f.data }
+    resource = {'language' : language, 'Image' : i_f.data }
     
     payload = {
         "auth": {
@@ -164,3 +166,5 @@ def send(request):
                             'index' : index_res,
                             'token' : token
                         }, safe=False)
+
+                        
