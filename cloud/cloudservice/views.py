@@ -130,6 +130,8 @@ def send(request):
         headers={'X-Auth-Token' : token,
                 'content-type' : 'application/json'}).json()
 
+    
+
     major_count = 1
     minor_count = 0
     
@@ -182,17 +184,34 @@ def send(request):
             }, data=yaml.dump(HOT, sort_keys=False))
 
 
+    # print(HOT)
+    # Hot_template = yaml.load(HOT)
+
+    # print(Hot_template)
+    
+    print(nowVersion)
+    template = yaml.load(requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/" + nowVersion + ".yaml",
+                headers={'X-Auth-Token' : token, 'content-type' : 'application/yaml'}).text)
+
+
+   
+
     Hot_body = {
         "stack_name": stack_name,
-        "template": { HOT },
+        "template" : template,
         "timeout_mins": 60
     }
 
 
-    requests.post("http://192.168.0.251/heat-api/v1/2e2cca5c94e44a859a24b8a63b0ec4cb/stacks",
+    print("=================")
+    print(json.dumps(Hot_body, indent=4))
+    print("==================")
+    
+    
+    print(requests.post("http://192.168.0.251/heat-api/v1/2e2cca5c94e44a859a24b8a63b0ec4cb/stacks",
     headers = {'X-Auth-Token' : token,
               'content-type' : 'application/json'
-              }, data = json.dumps(Hot_body))
+              }, data = json.dumps(template, indent=4)))
 
 
 
