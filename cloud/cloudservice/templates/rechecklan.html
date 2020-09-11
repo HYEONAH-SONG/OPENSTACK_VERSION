@@ -12,12 +12,17 @@
     <form action='{% url "sendurl" %}', method="POST">
         <h4>현재 HOT Version : {{ version }} </h4> 
         
+        강의실명:
+        <input type = "text"  name = "class name" size = "3">
+        <br></br>
+
         학생 수: 
         <input type = "text" value = 1 name = "student cnt" size = "2">
         {% csrf_token %} 
         {{form.as_p}}
 
         <span style="color:red">언어(최소 한 개 이상 선택)</span> :
+
         <input type = "checkbox" name = "lan" value = "C">
         C
         <input type = "checkbox" name = "lan" value = "C++">

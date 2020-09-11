@@ -4,9 +4,12 @@ from django.urls import path
 
 import cloudservice.views
 
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', cloudservice.views.view),
     path('sends/', cloudservice.views.send, name='sendurl'),
-    path('recheck/', cloudservice.views.send, name='recheckurl')
+    path('rechecklan/', cloudservice.views.send, name='rechecklan'),
+    path('recheckname/', cloudservice.views.send, name='recheckname')
 ]

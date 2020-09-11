@@ -17,9 +17,18 @@ def view(request):
     return render(request, 'cloudservice.html', context)
 
 def send(request):
+
+    # 강의실명
+    if not request.POST.getlist('class name')[0] :
+        return render(request, 'recheckname.html', context)
+
+    stack_name = request.POST.getlist('class name')[0]
+    print(stack_name)
+
+
     # 언어
     if not request.POST.getlist('lan') :
-        return render(request, 'recheck.html', context)
+        return render(request, 'rechecklan.html', context)
     
     lan = request.POST.getlist('lan')
     lan_cnt = len(lan)
@@ -30,7 +39,7 @@ def send(request):
         else :
             language = language + lan[i]
     
-        
+    
     print(language)
 
 
@@ -50,8 +59,16 @@ def send(request):
     send_form=Resource(request.POST)
     i_f = send_form['image']
     image = i_f.data
+    if image == "Ubuntu Linux 64-bit" :
+        HOT_image = "bionic-server-cloudimg-amd64"
+    
+    else :
+        HOT_image = image
+    
+    
     print(image)
     
+
     # 교육 Term
     if request.POST.getlist('latermn') :
         edu_term = request.POST.getlist('term')[0]
@@ -115,6 +132,7 @@ def send(request):
 
     major_count = 1
     minor_count = 0
+    
     global nowVersion 
     
     while(True):
@@ -135,7 +153,7 @@ def send(request):
                         index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] = flavor
                         nowVersion = "V"+str(major_count)+"."+str(minor_count)
                         HOT["description"] = "Coding System(" + language + ")" # language
-                        HOT["resources"]["my_instance"]["properties"]["image"] = image # image
+                        HOT["resources"]["my_instance"]["properties"]["image"] = HOT_image # image
                         HOT["resources"]["my_instance"]["properties"]["flavor"] = flavor # flavor
                         break
                 break
@@ -146,7 +164,7 @@ def send(request):
             index_res["V"+str(major_count)+".0"]["V"+str(major_count)+".0"] = flavor
             nowVersion = "V"+str(major_count)+"."+str(minor_count)
             HOT["description"] = "Coding System(" + language + ")" # language
-            HOT["resources"]["my_instance"]["properties"]["image"] = image # image
+            HOT["resources"]["my_instance"]["properties"]["image"] = HOT_image # image
             HOT["resources"]["my_instance"]["properties"]["flavor"] = flavor # flavor
             break
 
@@ -157,14 +175,29 @@ def send(request):
             'content-type' : 'application/json'
             }, data=json.dumps(index_res, indent=4))
 
+
     requests.put("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/" + nowVersion + ".yaml",
     headers={'X-Auth-Token' : token,
             'content-type' : 'application/yaml'
             }, data=yaml.dump(HOT, sort_keys=False))
+
+
+    Hot_body = {
+        "stack_name": stack_name,
+        "template": { HOT },
+        "timeout_mins": 60
+    }
+
+
+    requests.post("http://192.168.0.251/heat-api/v1/2e2cca5c94e44a859a24b8a63b0ec4cb/stacks",
+    headers = {'X-Auth-Token' : token,
+              'content-type' : 'application/json'
+              }, data = json.dumps(Hot_body))
+
+
 
     return JsonResponse({
                             'index' : index_res,
                             'token' : token
                         }, safe=False)
 
-                        
