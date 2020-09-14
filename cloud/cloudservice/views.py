@@ -60,6 +60,7 @@ def send(request):
     i_f = send_form['image']
     image = i_f.data
     if image == "Ubuntu Linux 64-bit" :
+        flavor = "m1.small"
         HOT_image = "bionic-server-cloudimg-amd64"
     
     else :
@@ -189,7 +190,7 @@ def send(request):
 
     # print(Hot_template)
     
-    print(nowVersion)
+
     template = yaml.load(requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/" + nowVersion + ".yaml",
                 headers={'X-Auth-Token' : token, 'content-type' : 'application/yaml'}).text)
 
@@ -202,16 +203,14 @@ def send(request):
         "timeout_mins": 60
     }
 
-
+    Json_Hot_body = json.dumps(Hot_body, indent=4)
     print("=================")
-    print(json.dumps(Hot_body, indent=4))
+    print(Json_Hot_body)
     print("==================")
     
     
     print(requests.post("http://192.168.0.251/heat-api/v1/2e2cca5c94e44a859a24b8a63b0ec4cb/stacks",
-    headers = {'X-Auth-Token' : token,
-              'content-type' : 'application/json'
-              }, data = json.dumps(template, indent=4)))
+    headers = {'X-Auth-Token' : token, 'content-type' : 'application/json'}, data = Json_Hot_body))
 
 
 
