@@ -60,8 +60,9 @@ def send(request):
     i_f = send_form['image']
     image = i_f.data
     if image == "Ubuntu Linux 64-bit" :
-        flavor = "m1.small"
-        HOT_image = "bionic-server-cloudimg-amd64"
+        flavor = "m1.medium"
+        HOT_image = "bionic-server-cloudimg-amd64" 
+        print("come in")
     
     else :
         HOT_image = image
@@ -158,6 +159,8 @@ def send(request):
                         HOT["description"] = "Coding System(" + language + ")" # language
                         HOT["resources"]["my_instance"]["properties"]["image"] = HOT_image # image
                         HOT["resources"]["my_instance"]["properties"]["flavor"] = flavor # flavor
+                        # HOT["resources"]["my_instance"]["properties"]["user_data"] = "| #cloud_config   runcmd: 'sudo apt-get install gcc'"
+
                         break
                 break
             major_count += 1
@@ -169,6 +172,7 @@ def send(request):
             HOT["description"] = "Coding System(" + language + ")" # language
             HOT["resources"]["my_instance"]["properties"]["image"] = HOT_image # image
             HOT["resources"]["my_instance"]["properties"]["flavor"] = flavor # flavor
+            # HOT["resources"]["my_instance"]["properties"]["user_data"] = "| #cloud_config   runcmd: 'sudo apt-get install gcc'"
             break
 
     HOT["heat_template_version"] = heat_template_version
