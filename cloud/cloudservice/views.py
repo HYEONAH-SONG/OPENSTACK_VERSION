@@ -18,6 +18,52 @@ def view(request):
 
 def send(request):
 
+    payload = {
+        "auth": {
+            "identity": {
+
+                "methods": [
+                    "password"
+                ],
+                "password": {
+                    "user": {
+                        "id": "6443abb0d446410f9f5918d910e767a0 ",
+                        "password": "devstack"
+                    }
+                }
+
+            },
+            "scope": {
+                "project": {
+                    "id": "2e2cca5c94e44a859a24b8a63b0ec4cb"
+                }
+            }
+        }
+    }
+
+
+    auth_res = requests.post("http://192.168.0.251/identity/v3/auth/tokens",
+        headers = {'content-type' : 'application/json'},
+        data = json.dumps(payload))
+
+    token = auth_res.headers['X-Subject-Token']
+
+    # container에 있는 baseHOT파일 가져오기
+    HOT_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/baseHOT(V1.0).yaml",
+        headers={'X-Auth-Token' : token,
+                'content-type' : 'application/yaml'}).text
+
+    HOT = yaml.load(HOT_res)
+
+    # container에 있는 index파일 가져오기
+    index_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
+        headers={'X-Auth-Token' : token,
+                'content-type' : 'application/json'}).json()
+
+    
+
+
+
     # 강의실명
     if not request.POST.getlist('class name')[0] :
         return render(request, 'recheckname.html', context)
@@ -38,7 +84,6 @@ def send(request):
             language = language + lan[i] +", "
         else :
             language = language + lan[i]
-    
     
     print(language)
 
@@ -90,48 +135,6 @@ def send(request):
 
     resource = {'language' : language, 'Image' : i_f.data }
     
-    payload = {
-        "auth": {
-            "identity": {
-
-                "methods": [
-                    "password"
-                ],
-                "password": {
-                    "user": {
-                        "id": "6443abb0d446410f9f5918d910e767a0 ",
-                        "password": "devstack"
-                    }
-                }
-
-            },
-            "scope": {
-                "project": {
-                    "id": "2e2cca5c94e44a859a24b8a63b0ec4cb"
-                }
-            }
-        }
-    }
-
-
-    auth_res = requests.post("http://192.168.0.251/identity/v3/auth/tokens",
-        headers = {'content-type' : 'application/json'},
-        data = json.dumps(payload))
-
-    token = auth_res.headers['X-Subject-Token']
-
-    # container에 있는 baseHOT파일 가져오기
-    HOT_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/baseHOT(V1.0).yaml",
-        headers={'X-Auth-Token' : token,
-                'content-type' : 'application/yaml'}).text
-
-    HOT = yaml.load(HOT_res)
-
-    # container에 있는 index파일 가져오기
-    index_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
-        headers={'X-Auth-Token' : token,
-                'content-type' : 'application/json'}).json()
-
     
 
     major_count = 1
@@ -159,8 +162,19 @@ def send(request):
                         HOT["description"] = "Coding System(" + language + ")" # language
                         HOT["resources"]["my_instance"]["properties"]["image"] = HOT_image # image
                         HOT["resources"]["my_instance"]["properties"]["flavor"] = flavor # flavor
-                        # HOT["resources"]["my_instance"]["properties"]["user_data"] = "| #cloud_config   runcmd: 'sudo apt-get install gcc'"
+                        if image == "Ubuntu Linux 32-bit" or image == "Ubuntu Linux 64-bit" :
+                            HOT["resources"]["my_instance"]["properties"]["user_data"] = "#cloud-config\nruncmd:\n  - netplan --debug generate\n  - netplan apply\n  - apt-get update -y\n  - apt-get upgrade -y\n"
+                            for i in range(0,lan_cnt):
+                                if lan[i] == "C": 
+                                    HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install gcc -y\n"
+                                if lan[i] == "C++" :
+                                    HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install g++ -y\n"
 
+
+                        # HOT["resources"]["my_instance"]["properties"]["user_data"] = "| #cloud_config   runcmd: 'sudo apt-get install gcc'"
+                        # - sudo apt-get install gcc -y
+                        #  - sudo apt-get install gcc -y\n
+                        #"#cloud-config\nruncmd:\n  - netplan --debug generate\n  - netplan apply\n  - apt-get update -y\n  - apt-get upgrade -y\n#cloud-config\nruncmd:\n  - netplan --debug generate\n  - netplan apply\n  - apt-get update -y\n  - apt-get upgrade -y\n
                         break
                 break
             major_count += 1
@@ -172,7 +186,13 @@ def send(request):
             HOT["description"] = "Coding System(" + language + ")" # language
             HOT["resources"]["my_instance"]["properties"]["image"] = HOT_image # image
             HOT["resources"]["my_instance"]["properties"]["flavor"] = flavor # flavor
-            # HOT["resources"]["my_instance"]["properties"]["user_data"] = "| #cloud_config   runcmd: 'sudo apt-get install gcc'"
+            if image == "Ubuntu Linux 32-bit" or image == "Ubuntu Linux 64-bit" :
+                HOT["resources"]["my_instance"]["properties"]["user_data"] = "#cloud-config\nruncmd:\n  - netplan --debug generate\n  - netplan apply\n  - apt-get update -y\n  - apt-get upgrade -y\n"
+                for i in range(0,lan_cnt):
+                    if lan[i] == "C": 
+                        HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install gcc -y\n"
+                    if lan[i] == "C++" :
+                        HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install g++ -y\n"
             break
 
     HOT["heat_template_version"] = heat_template_version
