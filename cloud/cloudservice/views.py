@@ -105,10 +105,13 @@ def send(request):
     i_f = send_form['image']
     image = i_f.data
     if image == "Ubuntu Linux 64-bit" :
-        flavor = "m1.medium"
+        flavor = "m1.small"
         HOT_image = "bionic-server-cloudimg-amd64" 
         print("come in")
-    
+    elif image == "CentOS 7 x86-64" :
+        flavor = "m1.small"
+        HOT_image = "CentOS-7-x86_64"
+
     else :
         HOT_image = image
     
