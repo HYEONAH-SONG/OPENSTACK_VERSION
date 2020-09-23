@@ -62,8 +62,6 @@ def send(request):
 
     
 
-
-
     # 강의실명
     if not request.POST.getlist('class name')[0] :
         return render(request, 'recheckname.html', context)
@@ -174,15 +172,10 @@ def send(request):
                                     HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install gcc -y\n"
                                 if lan[i] == "C++" :
                                     HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install g++ -y\n"
-
-
-                        # HOT["resources"]["my_instance"]["properties"]["user_data"] = "| #cloud_config   runcmd: 'sudo apt-get install gcc'"
-                        # - sudo apt-get install gcc -y
-                        #  - sudo apt-get install gcc -y\n
-                        #"#cloud-config\nruncmd:\n  - netplan --debug generate\n  - netplan apply\n  - apt-get update -y\n  - apt-get upgrade -y\n#cloud-config\nruncmd:\n  - netplan --debug generate\n  - netplan apply\n  - apt-get update -y\n  - apt-get upgrade -y\n
                         break
                 break
             major_count += 1
+
         except KeyError:
             # add new major version
             index_res["V"+str(major_count)+".0"]= { "resource" : resource }
@@ -214,11 +207,6 @@ def send(request):
             }, data=yaml.dump(HOT, sort_keys=False))
 
 
-    # print(HOT)
-    # Hot_template = yaml.load(HOT)
-
-    # print(Hot_template)
-    
 
     template = yaml.load(requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/" + nowVersion + ".yaml",
                 headers={'X-Auth-Token' : token, 'content-type' : 'application/yaml'}).text)

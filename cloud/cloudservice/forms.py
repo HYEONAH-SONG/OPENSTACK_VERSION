@@ -15,6 +15,7 @@ class Resource(forms.Form):
         ('Oracle Linux 32-bit', 'Oracle Linux 32-bit'),
         ('Oracle Linux 64-bit', 'Oracle Linux 64-bit'),   
     ]
+    
 
     # lan=[
     #     ('C', 'C'),
