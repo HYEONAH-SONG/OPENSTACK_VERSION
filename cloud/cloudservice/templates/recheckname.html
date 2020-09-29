@@ -5,13 +5,13 @@
 <head> 
         <title>오픈스택 교육 환경</title>
         <meta charset="UTF-8"> 
-        <link rel="stylesheet" href="{% static 'cloudservice/style.css' %}"/>
 </head>
 
 <body>
     <form action='{% url "sendurl" %}', method="POST">
         <h4>현재 HOT Version : {{ version }} </h4> 
         
+        <!--강의실명를 작성하지 않고 submit했을 경우 빨간색으로 표시-->
         <span style="color:red">강의실명</span>:
         <input type = "text"  name = "class name" size = "3">
         <br></br>
@@ -82,17 +82,7 @@
         <br></br>
         <p></p>
 
-        {% comment %} <h3>Vesion 목록</h3>
-        <div class='version_list'>
-
-        </div>
         
-        <p></p>
-
-        <h3>HOT 파일 내용</h3>
-        <div class='HOT'>
-            
-        </div> {% endcomment %}
     </form>
 </body>
 </html>

@@ -5,7 +5,6 @@
 <head> 
         <title>오픈스택 교육 환경</title>
         <meta charset="UTF-8"> 
-        <link rel="stylesheet" href="{% static 'cloudservice/style.css' %}"/>
 </head>
 
 <body>
@@ -18,9 +17,11 @@
 
         학생 수: 
         <input type = "text" value = 1 name = "student cnt" size = "2">
+
         {% csrf_token %} 
         {{form.as_p}}
 
+        <!--언어를 선택하지 않고 submit했을 경우 빨간색으로 표시-->
         <span style="color:red">언어(최소 한 개 이상 선택)</span> :
 
         <input type = "checkbox" name = "lan" value = "C">

@@ -26,9 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudservice.apps.CloudserviceConfig',
-    'rest_framework',
-    'corsheaders',
+    'cloudservice.apps.CloudserviceConfig' #생성한 APP(cloudservice)을 등록
 ]
 
 MIDDLEWARE = [

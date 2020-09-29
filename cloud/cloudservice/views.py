@@ -13,12 +13,14 @@ context = {
         'version' : nowVersion
     }
 
+
 def view(request):
-    return render(request, 'cloudservice.html', context)
+    return render(request, 'cloudservice.html', context) # context로 표현된 cloudservice.html 템플릿의 HttpResponse 객체를 반환.
+
 
 def send(request):
-
-    payload = {
+    
+    payload = {   #openstack keystone 토큰을 받을 때 필요한 정보
         "auth": {
             "identity": {
 
@@ -31,7 +33,6 @@ def send(request):
                         "password": "devstack"
                     }
                 }
-
             },
             "scope": {
                 "project": {
@@ -40,6 +41,7 @@ def send(request):
             }
         }
     }
+
 
 
     auth_res = requests.post("http://192.168.0.251/identity/v3/auth/tokens",
@@ -67,8 +69,6 @@ def send(request):
         return render(request, 'recheckname.html', context)
 
     stack_name = request.POST.getlist('class name')[0]
-    print(stack_name)
-
 
     # 언어
     if not request.POST.getlist('lan') :
@@ -83,7 +83,6 @@ def send(request):
         else :
             language = language + lan[i]
     
-    print(language)
 
 
 
@@ -96,7 +95,6 @@ def send(request):
     elif student_num > 79 and student_num < 160 : flavor = "m1.xlarge"
     #over 160
 
-    print(flavor)
 
     # 운영체제
     send_form=Resource(request.POST)
@@ -106,7 +104,7 @@ def send(request):
         if flavor == "m1.tiny" :
             flavor = "m1.small"
         HOT_image = "bionic-server-cloudimg-amd64" 
-        print("come in")
+
     elif image == "CentOS 7 x86-64" :
         if flavor == "m1.tiny" :
             flavor = "m1.small"
@@ -115,31 +113,24 @@ def send(request):
     else :
         HOT_image = image
     
-    
-    print(image)
-    
+
 
     # 교육 Term
     if request.POST.getlist('latermn') :
         edu_term = request.POST.getlist('term')[0]
-        print(edu_term)
     
     # 데이터 유지
     if request.POST.getlist('maintenance') :
         data_maintence = request.POST.getlist('maintenance')[0]
-        print(data_maintence)
         
     #이벤트
     if request.POST.getlist('event') :
         event = request.POST.getlist('event')[0]
-        print(event)
         
-
 
     resource = {'language' : language, 'Image' : i_f.data }
     
     
-
     major_count = 1
     minor_count = 0
     
@@ -207,12 +198,9 @@ def send(request):
             }, data=yaml.dump(HOT, sort_keys=False))
 
 
-
     template = yaml.load(requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/" + nowVersion + ".yaml",
                 headers={'X-Auth-Token' : token, 'content-type' : 'application/yaml'}).text)
 
-
-   
 
     Hot_body = {
         "stack_name": stack_name,
@@ -221,15 +209,6 @@ def send(request):
     }
 
     Json_Hot_body = json.dumps(Hot_body, indent=4)
-    print("=================")
-    print(Json_Hot_body)
-    print("==================")
-    
-    
-    print(requests.post("http://192.168.0.251/heat-api/v1/2e2cca5c94e44a859a24b8a63b0ec4cb/stacks",
-    headers = {'X-Auth-Token' : token, 'content-type' : 'application/json'}, data = Json_Hot_body))
-
-
 
     return JsonResponse({
                             'index' : index_res,
