@@ -20,7 +20,7 @@ def view(request):
 
 def send(request):
     
-    payload = {   #openstack keystone 토큰을 받을 때 필요한 정보
+    payload = {   #openstack keystone 토큰을 받을 때 필요한 body
         "auth": {
             "identity": {
 
