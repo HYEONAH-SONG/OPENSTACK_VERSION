@@ -13,14 +13,13 @@ context = {
         'version' : nowVersion
     }
 
-
 def view(request):
     return render(request, 'cloudservice.html', context) # context로 표현된 cloudservice.html 템플릿의 HttpResponse 객체를 반환.
 
 
 def send(request):
     
-    payload = {   #openstack keystone 토큰을 받을 때 필요한 body
+    payload = {   #openstack keystone 토큰을 발급받기 위한 body
         "auth": {
             "identity": {
 
@@ -48,9 +47,10 @@ def send(request):
         headers = {'content-type' : 'application/json'},
         data = json.dumps(payload))
 
+    #발급받은 token
     token = auth_res.headers['X-Subject-Token']
 
-    # container에 있는 baseHOT파일 가져오기
+    # openstack container에 있는 baseHOT파일 가져오기
     HOT_res = requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/baseHOT(V1.0).yaml",
         headers={'X-Auth-Token' : token,
                 'content-type' : 'application/yaml'}).text
@@ -64,13 +64,13 @@ def send(request):
 
     
 
-    # 강의실명
+    # 웹 인터페이스에서 입력받은 강의실명
     if not request.POST.getlist('class name')[0] :
         return render(request, 'recheckname.html', context)
 
     stack_name = request.POST.getlist('class name')[0]
 
-    # 언어
+    # 웹 인터페이스에서 입력받은 언어
     if not request.POST.getlist('lan') :
         return render(request, 'rechecklan.html', context)
     
@@ -86,7 +86,7 @@ def send(request):
 
 
 
-    # 학생수
+    # 웹 인터페이스에서 입력받은 학생수
     student_num = int(request.POST.getlist('student cnt')[0])
     if student_num < 10 : flavor = "m1.tiny"
     elif student_num > 9 and student_num <20 : flavor = "m1.small"
@@ -96,7 +96,7 @@ def send(request):
     #over 160
 
 
-    # 운영체제
+    # 웹 인터페이스에서 입력받은 운영체제
     send_form=Resource(request.POST)
     i_f = send_form['image']
     image = i_f.data
@@ -114,19 +114,19 @@ def send(request):
         HOT_image = image
     
 
-
-    # 교육 Term
+    # 웹 인터페이스에서 입력받은 교육 기간
     if request.POST.getlist('latermn') :
         edu_term = request.POST.getlist('term')[0]
     
-    # 데이터 유지
+    # 웹 인터페이스에서 입력받은 데이터 유지 기간
     if request.POST.getlist('maintenance') :
         data_maintence = request.POST.getlist('maintenance')[0]
         
-    #이벤트
+    # 웹 인터페이스에서 입력받은 이벤트 기간
     if request.POST.getlist('event') :
         event = request.POST.getlist('event')[0]
         
+
 
     resource = {'language' : language, 'Image' : i_f.data }
     
@@ -136,39 +136,36 @@ def send(request):
     
     global nowVersion 
     
+    # HOT 템플릿 버저닝을 하기 위한 반복문
     while(True):
         try:
-            # compare major version
-            if index_res["V"+str(major_count)+".0"]["resource"]["language"] == language and index_res["V"+str(major_count)+".0"]["resource"]["Image"] == image:
-                while(True):
+            if index_res["V"+str(major_count)+".0"]["resource"]["language"] == language and index_res["V"+str(major_count)+".0"]["resource"]["Image"] == image: # major 버전 기준으로 비교(language, image)
+                while(True):  # minor 버전 기준으로 비교
                     try:
-                        # conmpare minor version
-                        # 만약 flavor가 같은게 있으면 (버전 새로 생성 안해도 된다.)
-                        if index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] == flavor:
+                        if index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] == flavor: # 만약 flavor가 같은게 있으면 (버전 새로 생성 안해도 된다.)
                             nowVersion = "V"+str(major_count)+"."+str(minor_count)
                             break
                         else:
-                            minor_count += 1
-                    except KeyError:
-                        # add new minor version
+                            minor_count += 1 # 같은 flavor가 없으면 다음 minor 검사하기 위해 카운트.
+
+                    except KeyError:  # 새로운 minor 버전 추가
                         index_res["V"+str(major_count)+".0"]["V"+str(major_count)+"."+str(minor_count)] = flavor
                         nowVersion = "V"+str(major_count)+"."+str(minor_count)
                         HOT["description"] = "Coding System(" + language + ")" # language
                         HOT["resources"]["my_instance"]["properties"]["image"] = HOT_image # image
                         HOT["resources"]["my_instance"]["properties"]["flavor"] = flavor # flavor
-                        if image == "Ubuntu Linux 32-bit" or image == "Ubuntu Linux 64-bit" :
+                        if image == "Ubuntu Linux 32-bit" or image == "Ubuntu Linux 64-bit" : # image가 Ubuntu Linux 32-bit나 Ubuntu Linux 64-bit일 경우 user_data에 환경 설정을 위한 코드 추가
                             HOT["resources"]["my_instance"]["properties"]["user_data"] = "#cloud-config\nruncmd:\n  - netplan --debug generate\n  - netplan apply\n  - apt-get update -y\n  - apt-get upgrade -y\n"
                             for i in range(0,lan_cnt):
                                 if lan[i] == "C": 
-                                    HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install gcc -y\n"
+                                    HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install gcc -y\n" #language가 C언어일 경우 gcc 설치
                                 if lan[i] == "C++" :
-                                    HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install g++ -y\n"
+                                    HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install g++ -y\n" #language가 C++언어일 경우 gcc 설치
                         break
                 break
             major_count += 1
 
-        except KeyError:
-            # add new major version
+        except KeyError: # 새로운 major 버전 추가
             index_res["V"+str(major_count)+".0"]= { "resource" : resource }
             index_res["V"+str(major_count)+".0"]["V"+str(major_count)+".0"] = flavor
             nowVersion = "V"+str(major_count)+"."+str(minor_count)
@@ -184,24 +181,26 @@ def send(request):
                         HOT["resources"]["my_instance"]["properties"]["user_data"] +="  - sudo apt-get install g++ -y\n"
             break
 
+
     HOT["heat_template_version"] = heat_template_version
 
+    # openstack container에 index파일 저장
     requests.put("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/index.json",
     headers={'X-Auth-Token' : token,
             'content-type' : 'application/json'
             }, data=json.dumps(index_res, indent=4))
 
-
+    # openstack container에 HOT 템플릿 저장
     requests.put("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/" + nowVersion + ".yaml",
     headers={'X-Auth-Token' : token,
             'content-type' : 'application/yaml'
             }, data=yaml.dump(HOT, sort_keys=False))
 
-
+    # openstack container에서 HOT 템플릿 읽어오기
     template = yaml.load(requests.get("http://192.168.0.251:8080/v1/AUTH_2e2cca5c94e44a859a24b8a63b0ec4cb/files/" + nowVersion + ".yaml",
                 headers={'X-Auth-Token' : token, 'content-type' : 'application/yaml'}).text)
 
-
+    # stack 생성을 위한 body
     Hot_body = {
         "stack_name": stack_name,
         "template" : template,
@@ -210,6 +209,11 @@ def send(request):
 
     Json_Hot_body = json.dumps(Hot_body, indent=4)
 
+    # stack 생성
+    requests.post("http://192.168.0.251/heat-api/v1/2e2cca5c94e44a859a24b8a63b0ec4cb/stacks",
+    headers = {'X-Auth-Token' : token, 'content-type' : 'application/json'}, data = Json_Hot_body)
+
+    
     return JsonResponse({
                             'index' : index_res,
                             'token' : token
