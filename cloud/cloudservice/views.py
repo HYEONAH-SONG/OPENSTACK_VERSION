@@ -85,7 +85,6 @@ def send(request):
     
 
 
-
     # 웹 인터페이스에서 입력받은 학생수
     student_num = int(request.POST.getlist('student cnt')[0])
     if student_num < 10 : flavor = "m1.tiny"
@@ -213,7 +212,7 @@ def send(request):
     requests.post("http://192.168.0.251/heat-api/v1/2e2cca5c94e44a859a24b8a63b0ec4cb/stacks",
     headers = {'X-Auth-Token' : token, 'content-type' : 'application/json'}, data = Json_Hot_body)
 
-    
+
     return JsonResponse({
                             'index' : index_res,
                             'token' : token
