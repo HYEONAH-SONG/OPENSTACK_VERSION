@@ -64,13 +64,13 @@ def send(request):
 
     
 
-    # 웹 인터페이스에서 입력받은 강의실명
+    # 웹에서 입력받은 강의실명
     if not request.POST.getlist('class name')[0] :
         return render(request, 'recheckname.html', context)
 
     stack_name = request.POST.getlist('class name')[0]
 
-    # 웹 인터페이스에서 입력받은 언어
+    # 웹에서 입력받은 언어
     if not request.POST.getlist('lan') :
         return render(request, 'rechecklan.html', context)
     
@@ -85,7 +85,7 @@ def send(request):
     
 
 
-    # 웹 인터페이스에서 입력받은 학생수
+    # 웹에서 입력받은 학생수
     student_num = int(request.POST.getlist('student cnt')[0])
     if student_num < 10 : flavor = "m1.tiny"
     elif student_num > 9 and student_num <20 : flavor = "m1.small"
@@ -95,7 +95,7 @@ def send(request):
     #over 160
 
 
-    # 웹 인터페이스에서 입력받은 운영체제
+    # 웹에서 입력받은 운영체제
     send_form=Resource(request.POST)
     i_f = send_form['image']
     image = i_f.data
@@ -113,15 +113,15 @@ def send(request):
         HOT_image = image
     
 
-    # 웹 인터페이스에서 입력받은 교육 기간
+    # 웹에서 입력받은 교육 기간
     if request.POST.getlist('latermn') :
         edu_term = request.POST.getlist('term')[0]
     
-    # 웹 인터페이스에서 입력받은 데이터 유지 기간
+    # 웹에서 입력받은 데이터 유지 기간
     if request.POST.getlist('maintenance') :
         data_maintence = request.POST.getlist('maintenance')[0]
         
-    # 웹 인터페이스에서 입력받은 이벤트 기간
+    # 웹에서 입력받은 이벤트 기간
     if request.POST.getlist('event') :
         event = request.POST.getlist('event')[0]
         
@@ -135,7 +135,7 @@ def send(request):
     
     global nowVersion 
     
-    # HOT 템플릿 버저닝을 하기 위한 반복문
+    # HOT 템플릿 버저닝
     while(True):
         try:
             if index_res["V"+str(major_count)+".0"]["resource"]["language"] == language and index_res["V"+str(major_count)+".0"]["resource"]["Image"] == image: # major 버전 기준으로 비교(language, image)
@@ -212,7 +212,7 @@ def send(request):
     requests.post("http://192.168.0.251/heat-api/v1/2e2cca5c94e44a859a24b8a63b0ec4cb/stacks",
     headers = {'X-Auth-Token' : token, 'content-type' : 'application/json'}, data = Json_Hot_body)
 
-
+    # 웹에 index파일 내용과 token 출력
     return JsonResponse({
                             'index' : index_res,
                             'token' : token
