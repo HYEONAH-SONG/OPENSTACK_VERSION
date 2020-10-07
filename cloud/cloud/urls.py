@@ -5,7 +5,7 @@ from django.urls import path
 import cloudservice.views
 
 
-# views.py에 생성한 view를 url로 연결
+# url경로 정의
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', cloudservice.views.view), # http://127.0.0.1:8000와 views.py의 view함수 연결
