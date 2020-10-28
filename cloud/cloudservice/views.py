@@ -14,12 +14,13 @@ context = {
     }
 
 def view(request):
-    return render(request, 'cloudservice.html', context) # context로 표현된 cloudservice.html 템플릿의 HttpResponse 객체를 반환.
+    return render(request, 'cloudservice.html', context) # context를 포함한 cloudservice.html 템플릿의 HttpResponse 객체를 반환.
 
 
 def send(request):
-    
-    payload = {   #openstack keystone 토큰을 발급받기 위한 body
+
+    #openstack keystone 토큰을 발급받기 위한 body
+    payload = {   
         "auth": {
             "identity": {
 
@@ -83,7 +84,6 @@ def send(request):
         else :
             language = language + lan[i]
     
-
 
     # 웹에서 입력받은 학생수
     student_num = int(request.POST.getlist('student cnt')[0])
