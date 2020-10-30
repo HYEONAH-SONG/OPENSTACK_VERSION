@@ -50,7 +50,7 @@ $ django-admin startproject <프로젝트 이름>
 
 프로젝트를 생성하면 아래와 같은 스크립트가 생성된다. (프로젝트 이름이 mysite인 경우)
 
-![img](file:///C:/Users/PARKDO~1/AppData/Local/Temp/msohtmlclip1/01/clip_image002.jpg)
+![image](https://user-images.githubusercontent.com/48307561/97712078-4adf5680-1b01-11eb-9158-d8e33368f70e.png)
 
  
 
@@ -64,7 +64,7 @@ $ python manage.py startapp <앱 이름>
 
 그러면 아래와 같은 스크립트가 생성된다. (앱 이름이 polls인 경우)
 
-![img](file:///C:/Users/PARKDO~1/AppData/Local/Temp/msohtmlclip1/01/clip_image004.jpg)
+![image](https://user-images.githubusercontent.com/48307561/97712113-5763af00-1b01-11eb-8b52-9ccf6629bc5b.png)
 
  
 
