@@ -28,6 +28,52 @@
 
 ### Django 환경 구축
 
+Django는 파이썬으로 만들어진 무료 오픈소스 웹 애플리케이션 프레임워크이다.
+
+Django를 사용하기 위해서는 파이썬이 필요하다. 만약 파이썬이 설치가 안되어 있으면 먼저 파이썬을 설치해야 한다. (파이썬 설치 사이트 : https://www.python.org/downloads/)
+
+파이썬 설치를 완료했다면 파이썬이 설치된 경로에서 Scripts 디렉토리로 이동한다.
+
+그리고 아래와 같은 명령어를 통해 Django를 설치한다.
+
+```
+$ python -m django --version
+```
+
+ 
+
+Django 설치가 완료되면 프로젝트를 생성한다. (프로젝트 이름은 python 또는 Django에서 사용중인 이름은 피해야 한다.)
+
+```
+$ django-admin startproject <프로젝트 이름>
+```
+
+프로젝트를 생성하면 아래와 같은 스크립트가 생성된다. (프로젝트 이름이 mysite인 경우)
+
+![img](file:///C:/Users/PARKDO~1/AppData/Local/Temp/msohtmlclip1/01/clip_image002.jpg)
+
+ 
+
+그리고 개발을 하기위한 앱을 생성한다.
+
+```
+$ python manage.py startapp <앱 이름>
+```
+
+ 
+
+그러면 아래와 같은 스크립트가 생성된다. (앱 이름이 polls인 경우)
+
+![img](file:///C:/Users/PARKDO~1/AppData/Local/Temp/msohtmlclip1/01/clip_image004.jpg)
+
+ 
+
+위와 같은 방법으로 Django 환경을 구축한다.
+
+
+
+
+
 ### Django 주요 스크립트 설명
 
 ### 버전관리 시스템 적용 개발 동작 - 시퀀스 다이어그램
