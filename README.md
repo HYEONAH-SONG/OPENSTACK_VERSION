@@ -70,11 +70,21 @@ $ python manage.py startapp <앱 이름>
 
 위와 같은 방법으로 Django 환경을 구축한다.
 
-
+<br>
 
 
 
 ### Django 주요 스크립트 설명
+
+[settings.py]
+
+![image](https://user-images.githubusercontent.com/48307561/97781792-1509a300-1bd1-11eb-9840-c21200365e3e.png)
+
+setting.py 파일에서 로그 설정, APP 등록, Templates 설정, DB설정, 다국어 및 지역 시간 설정, 정적파일 설정 등의 장고 프레임워크의 모든 개발환경 세팅을 한다.
+
+
+
+
 
 ### 버전관리 시스템 적용 개발 동작 - 시퀀스 다이어그램
 
