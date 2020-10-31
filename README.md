@@ -84,7 +84,35 @@ setting.py 파일에서 로그 설정, APP 등록, Templates 설정, DB설정, �
 
 
 
+[urls.py]
 
+![image](https://user-images.githubusercontent.com/48307561/97781837-4edaa980-1bd1-11eb-92b6-3548bea4afe6.png)
+
+urls.py 파일에 URL 경로에 관한 논리를 정의한다.
+
+urlpatterns에 특정 URL을 기준으로 views.py에 정의한 view 함수를 매핑시킨다. 그래서 만약 지정된 URL 패턴과 일치하는 HTTP 요청이 수신된다면 관련된 view 함수가 실행된다.
+
+
+
+[templates]
+
+![image](https://user-images.githubusercontent.com/48307561/97781858-631ea680-1bd1-11eb-9440-8b7e59362285.png)
+
+templates는 파일의 구조나 레이아웃(예: HTML 페이지)을 정의하고, 실제 내용을 보여주는데 사용되는 텍스트 파일을 저장하는 폴더이다.
+
++ cloudservice.html : 코딩 교육 환경 웹페이지.
++ rechecklan.html : 웹 페이지에서 언어 항목 선택하지 않고 submit 했을 경우.
++ recheckname.html : 웹 페이지에서 강의실명 작성하지 않고 submit 했을 경우.
+
+
+
+[forms.py]
+
+![image](https://user-images.githubusercontent.com/48307561/97781871-7e89b180-1bd1-11eb-8030-cc93b29e3bc8.png)
+
+form은 웹 페이지상에서 한 개 이상의 필드나 위젯들의 묶음을 말하며, 사용자로부터 정보를 수집하여 서버에 제출하는데 사용된다. 
+
+forms.py에서는 Language(코딩 언어)의 종류를 저장하는 form을 정의한다.
 
 ### 버전관리 시스템 적용 개발 동작 - 시퀀스 다이어그램
 
