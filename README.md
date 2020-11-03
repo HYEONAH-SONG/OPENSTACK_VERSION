@@ -114,7 +114,18 @@ form은 웹 페이지상에서 한 개 이상의 필드나 위젯들의 묶음�
 
 forms.py에서는 Language(코딩 언어)의 종류를 저장하는 form을 정의한다.
 
+
+
+
+
 ### 버전관리 시스템 적용 개발 동작 - 시퀀스 다이어그램
 
+![image](https://user-images.githubusercontent.com/48307561/97959268-59c05480-1df2-11eb-9952-60ac79fe4f48.png)
 
-
+1. USER가 서버(127.0.0.1:8000)에 접속하면 views.py의 view()함수가 호출.
+2. view()함수는 cloudservice.html로 웹페이지 생성.
+3. 만들어진 웹페이지에서 코딩 교육 환경의 리소스 정보를 사용자가 입력.
+   + 강의실명을 적지 않고 제출할 경우 recheckname.html로 웹페이지 생성
+   + 언어를 선택하지 않고 제출할 경우 rechecklan.html로 웹페이지 생성
+4. 입력이 완료되면 views.py의 send()함수를 호출.
+5. 사용자에게 입력한 리소스 정보를 바탕으로 코딩 교육 환경 생성
