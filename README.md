@@ -2,7 +2,9 @@
 
 
 
-[TOC]
+<br>
+
+<br>
 
 
 
@@ -23,6 +25,10 @@
 + 개발 도구 : Python(3.8.3), Django(2.1), Openstack API
 
 + 협업 도구 : Github
+
+<br>
+
+
 
 
 
@@ -115,6 +121,8 @@ form은 웹 페이지상에서 한 개 이상의 필드나 위젯들의 묶음�
 forms.py에서는 Language(코딩 언어)의 종류를 저장하는 form을 정의한다.
 
 
+
+<br>
 
 
 
