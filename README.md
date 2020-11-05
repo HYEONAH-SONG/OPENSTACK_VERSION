@@ -28,7 +28,7 @@
 
 <br>
 
-
+<br>
 
 
 
@@ -78,7 +78,7 @@ $ python manage.py startapp <앱 이름>
 
 <br>
 
-
+<br>
 
 ### Django 주요 스크립트 설명
 
@@ -124,7 +124,7 @@ forms.py에서는 Language(코딩 언어)의 종류를 저장하는 form을 정�
 
 <br>
 
-
+<br>
 
 ### 버전관리 시스템 적용 개발 동작 - 시퀀스 다이어그램
 
