@@ -2,7 +2,17 @@
 
 
 
+:black_circle: [개발 환경 및 도구](https://github.com/DoJun-Park/openstack_versioning#%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EB%B0%8F-%EB%8F%84%EA%B5%AC)
+
+:black_circle:
+
+:black_circle:
+
+:black_circle:
+
 <br>
+
+
 
 <br>
 
