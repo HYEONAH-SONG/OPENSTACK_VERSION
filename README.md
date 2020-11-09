@@ -1,9 +1,14 @@
 # openstack_versioning
 
-:pushpin: [개발 환경 및 도구](https://github.com/DoJun-Park/openstack_versioning#%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EB%B0%8F-%EB%8F%84%EA%B5%AC)
+:pushpin: [개발 환경 및 도구](https://github.com/DoJun-Park/openstack_versioning#%EA%B0%9C%EB%B0%9C-%ED%99%98%EA%B2%BD-%EB%B0%8F-%EB%8F%84%EA%B5%AC) 
+
 :pushpin: [Django 환경 구축](https://github.com/DoJun-Park/openstack_versioning#django-%ED%99%98%EA%B2%BD-%EA%B5%AC%EC%B6%95)
+
 :pushpin: [Django 주요 스크립트 설명](https://github.com/DoJun-Park/openstack_versioning#django-%EC%A3%BC%EC%9A%94-%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%84%A4%EB%AA%85) 
+
 :pushpin:[버전관리 시스템 적용 개발 동작 - 시퀀스 다이어그램](https://github.com/DoJun-Park/openstack_versioning#%EB%B2%84%EC%A0%84%EA%B4%80%EB%A6%AC-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%A0%81%EC%9A%A9-%EA%B0%9C%EB%B0%9C-%EB%8F%99%EC%9E%91---%EC%8B%9C%ED%80%80%EC%8A%A4-%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8)
+
+
 
 <br>
 
